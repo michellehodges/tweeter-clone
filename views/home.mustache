@@ -1,23 +1,28 @@
 <!doctype html>
-<head>
-</head>
+<html>
+  <head>
+  </head>
 
-<body>
-  <h1> Hello there {{ username! }} </h1>
-  <h2> You've logged in {{ logintimes }} times so far. </h2>
+  <body>
+    <h1> Hello there {{ username }} !</h1>
+    <h2> You've logged in {{ logintimes }} times so far. </h2>
 
-  <h3> Messages from your friends: </h3>
-  <ul>
-      {{ #messages }}
-      <li>
-        <span>"{{ username.message}}" -- {{ username }}</span>
-      </li>
-      {{ /messages }}
-  </ul>
+    <h3> Post a message </h3>
+    <form method="post" action="/messages">
+    <input type="text" placeholder="Say something!">
+    <input type="submit" value="Post">
+    <h3> Messages from your circle: </h3>
+    <ul>
+        {{ #messages }}
+        <li>
+          <span>"{{ users.message}}" -- {{ username }}</span>
+        </li>
+        {{ /messages }}
+    </ul>
 
-  <form method="post" action="/logout">
-  <input type="submit" value="Log out">
-  </form>
-</body>
+    <form method="post" action="/logout">
+    <input type="submit" value="Log out">
+    </form>
+  </body>
 
 </html>
