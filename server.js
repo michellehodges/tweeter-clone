@@ -96,7 +96,8 @@ server.post('/signup', function(request, response) {
 })
 
 server.post('/click', function (request, response) {
-  request.session.who.clicktimes++;
+  request.session.who.clicks++;
+  response.redirect('/home')
 })
 
 server.post('/messages', function (request, response) {
