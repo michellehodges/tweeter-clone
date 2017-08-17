@@ -33,10 +33,10 @@ server.get('/', function(request, response){
 })
 
 server.get('/home', function(request, response) {
-  if (request.session.cookie != undefined) {
+  if (request.session.who !== undefined) {
     response.render('home', {
-      username: request.session.cookie.username,
-      logintimes: request.session.cookie.logins,
+      username: request.session.who.username,
+      logintimes: request.session.who.logins,
       messages: messages,
     });
   } else {
@@ -44,8 +44,10 @@ server.get('/home', function(request, response) {
 }
 })
 
-// 1. is the username real?
-// 2. if so, does the password match?
+server.get('/logout', function(request, response) {
+  response.render('logout')
+})
+
 server.post('/home', function(request, response) {
   let user = null;
 
@@ -62,8 +64,8 @@ server.post('/home', function(request, response) {
     }
 
     if (user != null) {
-      request.session.cookie = user;
-      request.session.cookie.login++;
+      request.session.who = user;
+      request.session.who.login++;
       response.redirect('/home')
     } else {
       response.redirect('/')
@@ -71,6 +73,19 @@ server.post('/home', function(request, response) {
   }
 })
 
+server.post('/message', function (request, response) {
+  messages.push({
+    message: request.body.message,
+    username: request.session.who
+  });
+  response.redirect('/home');
+})
+
+server.post('/logout', function(request, response) {
+  request.session.destroy(function() {
+    response.redirect('/logout')
+  })
+})
 
 // Run the server
 server.listen(3000, function() {

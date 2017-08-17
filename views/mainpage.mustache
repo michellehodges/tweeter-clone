@@ -4,11 +4,20 @@
   </head>
 
   <body>
-    <h1> Hello! Please log in. </h1>
+    <h1> Welcome to the super cool Twitter Knockoff, Tweeeeeeeter! </h1>
+
+    <h3> Please log in. </h3>
     <form method="post" action='/home'>
       <input type="text" name="username" placeholder="Username">
       <input type="password" name="password" placeholder="Password">
       <input type="submit" value="Log in">
+    </form>
+
+    <h3> Not yet a member? Sign up! </h3>
+    <form method="post" action='/signup'>
+      <input type="text" name="username" placeholder="Username">
+      <input type="password" name="password" placeholder="Password">
+      <input type="submit" value="Sign up now!">
     </form>
   </body>
 
