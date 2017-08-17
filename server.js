@@ -1,5 +1,4 @@
-
-//Setup requires
+//Dependencies
 const express = require('express');
 const mustache = require('mustache-express');
 const bodyparser = require('body-parser');
@@ -8,14 +7,14 @@ const session = require('express-session');
 const server = express();
 
 const users = [
-  { username: "mariel", password: "123", logins: 0 },
-  { username: "bobby", password: "abc", logins: 0 },
-  { username: "misch", password: "mememe", logins: 0 }
+  { username: "mariel", password: "123", logins: 0, clicks: 0 },
+  { username: "bobby", password: "abc", logins: 0, clicks: 0 },
+  { username: "misch", password: "mememe", logins: 0, clicks: 0 }
 ]
 
 const messages = [];
 
-//Configure the server
+//Server configure
 server.use(bodyparser.urlencoded({ extended: false }));
 server.use(session({
     secret: '98rncailevn-_DT83FZ@',
@@ -27,7 +26,7 @@ server.engine('mustache', mustache());
 server.set('views', './views')
 server.set('view engine', 'mustache');
 
-//Set up some routes
+//Get requests
 server.get('/', function(request, response){
   response.render('mainpage');
 })
@@ -37,11 +36,12 @@ server.get('/home', function(request, response) {
     response.render('home', {
       username: request.session.who.username,
       logintimes: request.session.who.logins,
+      clicktimes: request.session.who.clicks,
       messages: messages,
     });
   } else {
     response.redirect('/');
-}
+  }
 })
 
 server.get('/logout', function(request, response) {
@@ -52,6 +52,8 @@ server.get('/signup', function(request, response) {
   response.render('signup')
 })
 
+
+//Post requests
 server.post('/home', function(request, response) {
   let user = null;
 
@@ -82,8 +84,6 @@ server.post('/home', function(request, response) {
 server.post('/signup', function(request, response) {
   const username = request.body.newUsername;
   const password = request.body.newPassword;
-  // console.log(username)
-  // console.log(password)
 
   if (username !== null && password !== null)
     users.push({
@@ -95,6 +95,9 @@ server.post('/signup', function(request, response) {
   response.redirect('/signup')
 })
 
+server.post('/click', function (request, response) {
+  request.session.who.clicktimes++;
+})
 
 server.post('/messages', function (request, response) {
   messages.push({
