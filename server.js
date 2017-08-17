@@ -48,6 +48,10 @@ server.get('/logout', function(request, response) {
   response.render('logout')
 })
 
+server.get('/signup', function(request, response) {
+  response.render('signup')
+})
+
 server.post('/home', function(request, response) {
   let user = null;
 
@@ -56,27 +60,46 @@ server.post('/home', function(request, response) {
   }
 
   for (let i = 0; i < users.length; i++) {
-    const username = users[i].username;
-    const password = users[i].password;
+    let username = users[i].username;
+    let password = users[i].password;
 
     if (username === request.body.username && password === request.body.password) {
       user = users[i];
-    }
-
-    if (user != null) {
-      request.session.who = user;
-      request.session.who.login++;
-      response.redirect('/home')
-    } else {
-      response.redirect('/')
+      console.log(user);
     }
   }
+
+  if (user !== null) {
+    request.session.who = user;
+    request.session.who.logins++;
+    response.redirect('/home')
+  } else {
+    response.redirect('/')
+  }
+
 })
 
-server.post('/message', function (request, response) {
+server.post('/signup', function(request, response) {
+  const username = request.body.newUsername;
+  const password = request.body.newPassword;
+  // console.log(username)
+  // console.log(password)
+
+  if (username !== null && password !== null)
+    users.push({
+      username: request.body.newUsername,
+      password: request.body.newPassword,
+      logins: 0
+    })
+  console.log(users)
+  response.redirect('/signup')
+})
+
+
+server.post('/messages', function (request, response) {
   messages.push({
-    message: request.body.message,
-    username: request.session.who
+    msg: request.body.message,
+    username: request.session.who.username
   });
   response.redirect('/home');
 })
